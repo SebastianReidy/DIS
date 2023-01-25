@@ -49,13 +49,23 @@ features = tf.fit_transform(original_documents)
 - We want to estimate $P(q|M_d)$ where $M_d$ is the language model generating the document. Using an independence assumption: 
 $$P(q|M_d) \approx \prod_{t \in q} P_{mle} (t | M_d)$$
 For the term not going to 0 when moddeling $P(q|M_d)$ with a product we introduce smoothing where we also consider the probability of the term being generated in by the collection language model $M_c$. 
-$$P(d|q) \approx P(d) \prod_{t\in q} ((1-\lambda) P(t|M_c) + \lambda P(t|M_d) $$
+$$P(d|q) \approx P(d) \prod_{t\in q} (1-\lambda) P(t|M_c) + \lambda P(t|M_d) $$
 
 
 ## Roccios algo for relevance feedback 
 Go in the direction of the average relevant vector and away from the average non relevant vector. A variant sets all nonzero weights of the new query vector to zero. 
 
 $$ \vec{q_m} = \alpha \vec{q_0} + \frac{\beta}{|D_r|} \sum_{\vec{d_j} \in D_r} \vec{d_j} - \frac{\gamma}{|D_{nr}|} \sum_{\vec{d_j} \in D_{nr}} \vec{d_j} $$
+
+
+## Fagins algorithm for distributed retreival
+1. Sort the posting lists by TF-IDF value 
+2. Scan all lists (top element of all lists, then second element of all lists ...) until we found $k$ documents in all lists. 
+3. Retreive missing weights among the retreived documents. Return the documents with the highest overall weights.
+
+
+## Inverted list 
+An inverted list / file can be created if we map the file to $(doc_id, 'word')$ tuples. Then, reduce by word to a tuple with the word and a list of all occurances $(word, [doc1, doc7, ...])$.
 
 
 ## Taxonomy induction 
