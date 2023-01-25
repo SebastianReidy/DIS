@@ -68,6 +68,18 @@ $$ \vec{q_m} = \alpha \vec{q_0} + \frac{\beta}{|D_r|} \sum_{\vec{d_j} \in D_r} \
 An inverted list / file can be created if we map the file to $(doc_id, 'word')$ tuples. Then, reduce by word to a tuple with the word and a list of all occurances $(word, [doc1, doc7, ...])$.
 
 
+## Latent semantic indexing 
+Do an SVD and select the $k$ principle topics for further analysis. 
+
+```{python}
+    K,S,Dt = np.linalg.svd(term_doc_matrix, full_matrices=False)
+
+    K_sel = K[:, :k]
+    S_sel = np.diag(S[:k])
+    Dt_sel = Dt[:k, :]
+```
+
+
 ## Taxonomy induction 
 - Challenge: reduce the noise as much as possible w/o loosing to many good results. In a taxonomy graph with longer paths we have inherenlty more noise. 
 - Find all relations in a text with python regex: `re.findall("[a-z]+ is a [a-z]+", file_text)`. 
