@@ -1,5 +1,6 @@
 # DIS summary 
 
+
 ## Vector space retreival (TF-IDF)
 - an example for a tokenizer 
 
@@ -42,6 +43,20 @@ features = tf.fit_transform(original_documents)
   - first sum: average over a set of queries
   - second sum: average over the interpolated percision. For that iterate over $k$ in reverse order and add the highest precision value seen so far to the list of precision values IF a correct document is retreived. Normalize by the length of the ground truth set. 
   $$MAP = \frac{1}{|Q|} \sum_{j=1}^{|Q|} \frac{1}{m_j} \sum_{k=1}^{m_j} P_{int}(D_{jk}) $$
+
+
+## Probabilistic modeling
+- We want to estimate $P(q|M_d)$ where $M_d$ is the language model generating the document. Using an independence assumption: 
+$$P(q|M_d) \approx \prod_{t \in q} P_{mle} (t | M_d)$$
+For the term not going to 0 when moddeling $P(q|M_d)$ with a product we introduce smoothing where we also consider the probability of the term being generated in by the collection language model $M_c$. 
+$$P(d|q) \approx P(d) \prod_{t\in q} ((1-\lambda) P(t|M_c) + \lambda P(t|M_d) $$
+
+
+## Roccios algo for relevance feedback 
+Go in the direction of the average relevant vector and away from the average non relevant vector. A variant sets all nonzero weights of the new query vector to zero. 
+
+$$ \vec{q_m} = \alpha \vec{q_0} + \frac{\beta}{|D_r|} \sum_{\vec{d_j} \in D_r} \vec{d_j} - \frac{\gamma}{|D_{nr}|} \sum_{\vec{d_j} \in D_{nr}} \vec{d_j} $$
+
 
 ## Taxonomy induction 
 - Challenge: reduce the noise as much as possible w/o loosing to many good results. In a taxonomy graph with longer paths we have inherenlty more noise. 
