@@ -92,6 +92,37 @@ word_embeddings = np.array([model[word] for word in vocabulary])
 Compute the update of the authority stores as `auth_new = (np.matmul(np.transpose(A),hub))` and normalize with `auth=auth_new /  np.linalg.norm(auth_new, 2)`. For the hub scores we do the same but w/o transposing $A$. 
 
 
+## Page rank 
+```{python}
+def pagerank_iterative(L, R=None):
+    if R is None: #We might want to compute R outside this function to avoid recomputing large matrix
+        R = np.multiply(L, 1 / np.sum(L,axis=0))
+        
+    N = R.shape[0]
+    e = np.ones(shape=(N,1))
+    q = 0.9
+
+    p = e
+    delta = 1
+    epsilon = 0.001
+    i = 0
+    while delta > epsilon:
+        p_prev = p
+        p = np.matmul(q * R, p_prev)
+        p = p + (1-q) / N * e
+        delta = np.linalg.norm(p-p_prev,1)
+        i += 1
+
+    print("Converged after {0} iterations".format(i))
+    return R,p
+```
+
+
+## Modularity 
+$$Q=\frac{1}{2m} \sum_{i,j} \left ( A_{ij} - \frac{k_i k_j}{2m} \right ) \delta (C_i,C_j)$$
+where $C_i, C_j$ are the cluster memberships. $Q>0.3-0.7$ means significant community structure. In the implementation we use $G.number_of_edges(u=None,v=None)$. Edge betweenness is the fraction of shortest paths going over an edge. 
+
+
 ## Taxonomy induction 
 - Challenge: reduce the noise as much as possible w/o loosing to many good results. In a taxonomy graph with longer paths we have inherenlty more noise. 
 - Find all relations in a text with python regex: `re.findall("[a-z]+ is a [a-z]+", file_text)`. 
