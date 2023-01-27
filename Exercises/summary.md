@@ -88,6 +88,9 @@ vocabulary = model.words
 word_embeddings = np.array([model[word] for word in vocabulary])
 ```
 
+## HITS 
+Compute the update of the authority stores as `auth_new = (np.matmul(np.transpose(A),hub))` and normalize with `auth=auth_new /  np.linalg.norm(auth_new, 2)`. For the hub scores we do the same but w/o transposing $A$. 
+
 
 ## Taxonomy induction 
 - Challenge: reduce the noise as much as possible w/o loosing to many good results. In a taxonomy graph with longer paths we have inherenlty more noise. 
