@@ -142,9 +142,24 @@ The `surprise` library offers algorithms for tasks of this kind.
 ## Association Rules
 Appriori algoirthm: Compute all possible itemsets fulfilling the support requrement. Then compute the confidence of rules (body -> head) of the possible itemsets. Support = $p(body,head)$, confidence = $p(head|body)$. 
 
+
 ## RDF statements 
 ... have the form subject property object. Where properties define relationships to other resources ore fixed values. RDF allows us to categorize resources into different classes (typing)
 
+
+## Entity and Information extraction
+Get annotations for text with Spacy. 
+```{python}
+nlp = spacy.load("en_core_web_sm")
+doc = nlp("Apple is looking at buying U.K. startup for $1 billion")
+
+for token in doc:
+    print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
+            token.shape_, token.is_alpha, token.is_stop)
+    ents = [(e.text, e.label_, e.kb_id_) for e in doc.ents]
+```
+For example, we can find persons in a text trough `e.label_ == "PERSON"`. We used the heuristic that the first person entity after the word "directed" is the director of a movie. Smoothing of the emission probabilities (no smoothing of transitions): $P_{smooth}(w_i|e_i) = \lambda P(w_i|s_i) + (1-\lambda) \frac{1}{n}$, where $n$ is the number of bigrams / samples. When using a HMM $P(x|start)$ or $P(y|start)$ do not mean the starting states, they denote the prior distributions. `'R'.isupper()` can be used to check if a character is uppercase or not. 
+ 
 
 ## Taxonomy induction 
 - Challenge: reduce the noise as much as possible w/o loosing to many good results. In a taxonomy graph with longer paths we have inherenlty more noise. 
