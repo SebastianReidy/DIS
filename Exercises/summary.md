@@ -137,6 +137,14 @@ $$
 {r}_{x}(a) = \bar{r}_{x} + \frac{\sum\limits_{y \in N_{U}(x)} sim(x, y) (r_{y}(a) - \bar{r}_{y})}{\sum\limits_{y \in N_{U}(x)}|sim(x, y)|}
 $$
 The `surprise` library offers algorithms for tasks of this kind. 
+A nice way is also to compute the dot product of a similarity matrix and a vector and then drop the already rated columns. 
+```{python}
+score = similarity_matrix.dot(user_article_log_vector).div(similarity_matrix.sum(axis=1))
+
+# Remove the known likes from the recommendation.
+score = score.drop(user_articles)
+score
+```
 
 
 ## Association Rules
