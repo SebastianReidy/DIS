@@ -123,6 +123,26 @@ $$Q=\frac{1}{2m} \sum_{i,j} \left ( A_{ij} - \frac{k_i k_j}{2m} \right ) \delta 
 where $C_i, C_j$ are the cluster memberships. $Q>0.3-0.7$ means significant community structure. In the implementation we use $G.number_of_edges(u=None,v=None)$. Edge betweenness is the fraction of shortest paths going over an edge. 
 
 
+## Transformer models with torch
+We have to set the weights to the pretrained embeddings and adjust the internal dimensions if a corresponding error message pops up. `model = AttentionModel(len(train_set.text_vocab), len(train_set.label_vocab), weights=embeddings, e_dim=50)`. We set a batch size and collade the batches such that all samples in the batch have the same dimensions `torch.utils.data.DataLoader(train_set, batch_size=128, collate_fn=model.collate_batch)`. 
+
+
+## Collaborative filtering 
+To get similarity matrices for collaborative filtering use the follwing to get ITEM similarity `item_similarity = 1-pairwise_distances(np.transpose(train_data_matrix), metric='cosine')` w\o the transpose we compute user similarity. Item based filtering is done via (averaging over the weighted items of the same user): 
+$$
+{r}_{x}(a) =  \frac{\sum\limits_{b \in N_{I}(a)} sim(a, b) r_{x}(b)}{\sum\limits_{b \in N_{I}(a)}|sim(a, b)|}
+$$
+User based collaborative filtering via (adjusting the average rating of a user, averaging over all users that rated the same item): 
+$$
+{r}_{x}(a) = \bar{r}_{x} + \frac{\sum\limits_{y \in N_{U}(x)} sim(x, y) (r_{y}(a) - \bar{r}_{y})}{\sum\limits_{y \in N_{U}(x)}|sim(x, y)|}
+$$
+The `surprise` library offers algorithms for tasks of this kind. 
+
+
+## Association Rules
+Appriori algoirthm: Compute all possible itemsets fulfilling the support requrement. Then compute the confidence of rules (body -> head) of the possible itemsets. Support = $p(body,head)$, confidence = $p(head|body)$. 
+
+
 ## Taxonomy induction 
 - Challenge: reduce the noise as much as possible w/o loosing to many good results. In a taxonomy graph with longer paths we have inherenlty more noise. 
 - Find all relations in a text with python regex: `re.findall("[a-z]+ is a [a-z]+", file_text)`. 
