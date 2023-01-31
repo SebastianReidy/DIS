@@ -142,6 +142,9 @@ The `surprise` library offers algorithms for tasks of this kind.
 ## Association Rules
 Appriori algoirthm: Compute all possible itemsets fulfilling the support requrement. Then compute the confidence of rules (body -> head) of the possible itemsets. Support = $p(body,head)$, confidence = $p(head|body)$. 
 
+## RDF statements 
+... have the form subject property object. Where properties define relationships to other resources ore fixed values. RDF allows us to categorize resources into different classes (typing)
+
 
 ## Taxonomy induction 
 - Challenge: reduce the noise as much as possible w/o loosing to many good results. In a taxonomy graph with longer paths we have inherenlty more noise. 
